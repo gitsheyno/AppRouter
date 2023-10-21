@@ -1,6 +1,7 @@
 import getUser from "@/lib/getUser";
 import getUserPosts from "@/lib/getUserPosts";
 import UserPosts from "./components/UserPosts";
+import getAllUsers from "@/lib/getAllUsers";
 import { Suspense } from "react";
 import { Metadata } from "next";
 
@@ -39,4 +40,15 @@ export default async function UserPage({ params: { userid } }: Params) {
       </Suspense>
     </>
   );
+}
+
+export async function generateStaticParams() {
+  const userData: Promise<User[]> = getAllUsers();
+  const users: User[] = await userData;
+
+  return users.map((user) => {
+    return {
+      userid: user.id.toString(),
+    };
+  });
 }
